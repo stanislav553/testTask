@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button'
 import SendIcon from '@mui/icons-material/Send'
 import {TextField} from '@mui/material'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import {useAddDeviceMutation} from '../../store/requsers/request.api'
 import {MyData} from '../mydateInterface'
 
@@ -13,11 +13,11 @@ export default function AddDevices() {
   const dataParams: MyData = {
     id: +valueId,
     name: valueName,
-    uniqueId: '756454897', //узнать откуда взять
+    uniqueId: '756454897',
     status: valueStatus,
     disabled: false,
     lastUpdate: new Date().toISOString(),
-    positionId: 54654465, //узнать откуда взять
+    positionId: 54654465,
     groupId: 0,
     phone: 'null',
     model: 'null',
@@ -28,10 +28,13 @@ export default function AddDevices() {
 
   const [addData, {status}] = useAddDeviceMutation()
 
+  useEffect(() => {
+    console.log(status)
+  }, [status])
+
   const handleChange = () => {
     if (valueId.length && valueName.length && valueStatus.length) {
       addData(dataParams)
-      console.log(status)
     } else {
       alert('не все данные заполнены, пожалуйста заполните данные')
     }

@@ -4,7 +4,7 @@ export interface MyData {
   uniqueId: string
   status: string
   disabled: boolean
-  lastUpdate: string // в формате ISO 8601
+  lastUpdate: string
   positionId: number
   groupId: number
   phone: string

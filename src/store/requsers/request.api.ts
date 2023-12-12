@@ -9,7 +9,6 @@ export const requestApi = createApi({
     }
   }),
   refetchOnFocus: true,
-
   endpoints: build => ({
     searchDevices: build.query({
       query: () => ({
@@ -20,18 +19,14 @@ export const requestApi = createApi({
     deleteDevice: build.mutation({
       query: (id: number) => ({
         url: `/${id}`,
-        params: {
-          method: 'DELETE'
-        }
+        method: 'DELETE'
       })
     }),
     addDevice: build.mutation({
       query: body => ({
         url: ``,
-        params: {
-          method: 'POST',
-          body
-        }
+        method: 'POST',
+        body
       })
     })
   })
