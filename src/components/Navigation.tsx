@@ -10,25 +10,26 @@ import MenuItem from '@mui/material/MenuItem'
 import Menu from '@mui/material/Menu'
 import {InputBase, Paper} from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
-import {useLazySearchDeviceQuery} from '../store/requsers/request.api'
+import {useLazySearchDevicesQuery} from '../store/requsers/request.api'
 import {useDispatch} from 'react-redux'
 import {devices} from '../store/reducers/devicesReducer'
 
 export default function Navigation() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const [searchDevise, setSearchDevice] = React.useState('')
+  const [search, {data}] = useLazySearchDevicesQuery()
+  const dispatch = useDispatch()
+
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
   }
   const handleClose = () => {
     setAnchorEl(null)
   }
-  const dispatch = useDispatch()
-  const [searchDevise, setSearchDevice] = React.useState('')
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchDevice(e.target.value)
   }
-  const [search, {data}] = useLazySearchDeviceQuery()
 
   const searchDeviseFunction = () => {
     if (searchDevise.trim().length) {
@@ -41,9 +42,13 @@ export default function Navigation() {
 
   React.useEffect(() => {
     if (data !== undefined) {
-      dispatch(devices([data]))
+      if (typeof data === 'object' && Array.isArray(data)) {
+        dispatch(devices(data))
+        console.log(data)
+      } else {
+        dispatch(devices([data]))
+      }
     }
-    console.log([data])
   }, [data])
 
   return (

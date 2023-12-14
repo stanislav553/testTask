@@ -11,14 +11,8 @@ export const requestApi = createApi({
 
   endpoints: build => ({
     searchDevices: build.query({
-      query: () => ({
-        url: ``,
-        method: 'GET'
-      })
-    }),
-    searchDevice: build.query({
       query: (id: string) => ({
-        url: `/${id}`,
+        url: id ? `/${id}` : '',
         method: 'GET'
       })
     }),
@@ -45,5 +39,5 @@ export const {
   useSearchDevicesQuery,
   useDeleteDeviceMutation,
   useAddDeviceMutation,
-  useLazySearchDeviceQuery
+  useLazySearchDevicesQuery
 } = requestApi

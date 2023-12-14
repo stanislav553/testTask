@@ -15,19 +15,11 @@ import {useEffect} from 'react'
 import {useSelector} from 'react-redux'
 import {devices} from '../store/reducers/devicesReducer'
 import {useDispatch} from 'react-redux'
+import {Result} from '../components/Interfaces'
 
 export default function ObjectsPage() {
-  interface Result {
-    id: number
-    name: string
-    lastUpdate: string
-    status: string
-    positionId: string
-    uniqueId: string
-  }
-
   const dispatch = useDispatch()
-  const {isLoading, isError, data, error, status} = useSearchDevicesQuery('')
+  const {isLoading, data, error} = useSearchDevicesQuery('')
   const devicesSelector = useSelector(
     (state: typeof data) => state.devicesReducer.devices
   )
@@ -46,6 +38,7 @@ export default function ObjectsPage() {
       </div>
     )
   }
+
   return (
     <>
       <TableContainer component={Paper} className="mb-[100px]">

@@ -17,3 +17,12 @@ export interface MyData {
 export interface IDeleteProps {
   id: number
 }
+
+export interface Result {
+  id: number
+  name: string
+  lastUpdate: string
+  status: string
+  positionId: string
+  uniqueId: string
+}
