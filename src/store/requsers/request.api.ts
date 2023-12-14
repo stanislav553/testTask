@@ -1,18 +1,24 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
+import {token} from '../../constants/constants'
 export const requestApi = createApi({
   reducerPath: 'autotracker',
   baseQuery: fetchBaseQuery({
     baseUrl: 'https://gps.autotracker.group/api/devices',
     headers: {
-      Authorization:
-        'Bearer RzBFAiEA92qN8JvTQ6BIgvjSTke8iQltj3SJf9vhkqyf5zcuUL4CIF1GRd1vLuSJrzzDqv80AF_BAiF91tCWPMvlhuRNrI0DeyJ1IjozLCJlIjoiMjAyMy0xMi0zMVQyMTowMDowMC4wMDArMDA6MDAifQ'
+      Authorization: token
     }
   }),
-  refetchOnFocus: true,
+
   endpoints: build => ({
     searchDevices: build.query({
       query: () => ({
         url: ``,
+        method: 'GET'
+      })
+    }),
+    searchDevice: build.query({
+      query: (id: string) => ({
+        url: `/${id}`,
         method: 'GET'
       })
     }),
@@ -26,7 +32,10 @@ export const requestApi = createApi({
       query: body => ({
         url: ``,
         method: 'POST',
-        body
+        body,
+        headers: {
+          REQUEST_BODY_SCHEMA: 'application/json'
+        }
       })
     })
   })
@@ -35,5 +44,6 @@ export const requestApi = createApi({
 export const {
   useSearchDevicesQuery,
   useDeleteDeviceMutation,
-  useAddDeviceMutation
+  useAddDeviceMutation,
+  useLazySearchDeviceQuery
 } = requestApi

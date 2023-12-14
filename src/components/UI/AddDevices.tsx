@@ -3,7 +3,7 @@ import SendIcon from '@mui/icons-material/Send'
 import {TextField} from '@mui/material'
 import {useEffect, useState} from 'react'
 import {useAddDeviceMutation} from '../../store/requsers/request.api'
-import {MyData} from '../mydateInterface'
+import {MyData} from '../Interfaces'
 
 export default function AddDevices() {
   const [valueId, setValueId] = useState('')
@@ -26,18 +26,26 @@ export default function AddDevices() {
     attributes: {}
   }
 
-  const [addData, {status}] = useAddDeviceMutation()
+  const [addData, {status, error}] = useAddDeviceMutation()
+  const [add, setAdd] = useState(false)
 
   useEffect(() => {
-    console.log(status)
-  }, [status])
+    if (error && status === 'rejected') {
+      setAdd(true)
+    }
+  }, [status, error])
 
-  const handleChange = () => {
+  const handleChange = async () => {
     if (valueId.length && valueName.length && valueStatus.length) {
-      addData(dataParams)
+      await addData(dataParams)
     } else {
       alert('не все данные заполнены, пожалуйста заполните данные')
     }
+  }
+
+  if (add) {
+    console.log('Обновите страницу и повторите запрос')
+    setAdd(false)
   }
 
   return (

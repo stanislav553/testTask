@@ -11,6 +11,10 @@ import {
 import {useSearchDevicesQuery} from '../store/requsers/request.api'
 import Delete from '../components/UI/Delete'
 import AddDevices from '../components/UI/AddDevices'
+import {useEffect} from 'react'
+import {useSelector} from 'react-redux'
+import {devices} from '../store/reducers/devicesReducer'
+import {useDispatch} from 'react-redux'
 
 export default function ObjectsPage() {
   interface Result {
@@ -21,20 +25,27 @@ export default function ObjectsPage() {
     positionId: string
     uniqueId: string
   }
-  const {isLoading, isError, data} = useSearchDevicesQuery('', {
-    refetchOnFocus: true
-  })
+
+  const dispatch = useDispatch()
+  const {isLoading, isError, data, error, status} = useSearchDevicesQuery('')
+  const devicesSelector = useSelector(
+    (state: typeof data) => state.devicesReducer.devices
+  )
+
+  useEffect(() => {
+    if (data) {
+      dispatch(devices(data))
+    }
+  }, [data])
+
   if (isLoading) return <CircularProgress />
-  if (isError) {
+  if (error) {
     return (
       <div className="text-red-700 text-center text-7xl">
         ERROR...PLEASE RENEW THE PAGE{' '}
       </div>
     )
   }
-
-  console.log(data)
-
   return (
     <>
       <TableContainer component={Paper} className="mb-[100px]">
@@ -51,19 +62,25 @@ export default function ObjectsPage() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data?.map((data: Result, index: number) => (
-              <TableRow key={data.id}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{data.id}</TableCell>
-                <TableCell align="center">{data.name}</TableCell>
-                <TableCell align="center">{data.lastUpdate}</TableCell>
-                <TableCell align="center">{data.status}</TableCell>
-                <TableCell align="center">{data.positionId}</TableCell>
-                <TableCell align="center">
-                  <Delete id={data.id} />
-                </TableCell>
-              </TableRow>
-            ))}
+            {devicesSelector?.map((data: Result, index: number) => {
+              if (data.id) {
+                return (
+                  <TableRow key={data.id}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{data.id}</TableCell>
+                    <TableCell align="center">{data.name}</TableCell>
+                    <TableCell align="center">{data.lastUpdate}</TableCell>
+                    <TableCell align="center">{data.status}</TableCell>
+                    <TableCell align="center">{data.positionId}</TableCell>
+                    <TableCell align="center">
+                      <Delete id={data.id} />
+                    </TableCell>
+                  </TableRow>
+                )
+              } else {
+                return ''
+              }
+            })}
           </TableBody>
         </Table>
       </TableContainer>

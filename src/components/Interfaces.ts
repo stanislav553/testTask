@@ -13,3 +13,7 @@ export interface MyData {
   category: string
   attributes: object
 }
+
+export interface IDeleteProps {
+  id: number
+}
